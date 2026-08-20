@@ -1,0 +1,23 @@
+name: Auto-Sync Fork
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Runs every day at midnight UTC (You can change this schedule)
+  workflow_dispatch:     # Allows you to trigger a manual sync anytime from the GitHub UI
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout your fork
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Pull upstream changes
+        uses: repo-sync/github-sync@v2
+        with:
+          source_repo: "https://github.com/mindwear-capitian/followupboss-mcp-server.git"
+          source_branch: "main"
+          destination_branch: "main"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
